@@ -7,14 +7,10 @@ ctx.fillStyle = 'rgb(255,255,255)';
 ctx.fillRect(0,0,width,height);
 var curX;
 var curY;
-var curKey;
 // update mouse pointer coordinates
 document.addEventListener("mousemove", (e) => {
   curX = e.pageX;
   curY = e.pageY;
-});
-document.addEventListener("keypress", (e) => {
-  curKey = e.keyCode;
 });
 var posY = 0;
 function drawTrig(xPos, yPos){
@@ -32,7 +28,6 @@ function draw() {
   ctx.fillRect(0,0,width,height);
   ctx.fillStyle = "blue";
   ctx.font = "48px georgia";
-  ctx.fillText(curKey, 50, 150);
   drawTrig(curX-100,posY);
   if (posY > height){
 	  posY = -100;
