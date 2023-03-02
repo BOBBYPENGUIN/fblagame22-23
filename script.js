@@ -126,7 +126,7 @@ UsefulFunctions.prototype.generateLetter = function(level){
 		}else if (randNum <= 98){
 			return("y");
 		}else if (randNum <= 99){
-			return("x");
+			return("z");
 		}else{
 			return("a");
 		}
