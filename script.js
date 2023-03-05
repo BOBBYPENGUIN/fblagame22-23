@@ -5,6 +5,60 @@ const ctx = canvas.getContext('2d');
 //Background
 ctx.fillStyle = 'rgb(255,255,255)';
 ctx.fillRect(0,0,width,height);
+
+var level = -1;
+while (level < 0 || level > 2) {
+  level = parseInt(prompt("Choose a level: 0 for easy, 1 for medium, or 2 for hard."));
+}
+const difficulty = {
+	easy: {
+	  speed: width / 11 / 50,
+	  scoreMultiplier: 2,
+	  generateLetter: function() {
+		const letters = ['a', 's', 'd', 'f', 'j', 'k', 'l', ';'];
+		return letters[Math.floor(Math.random() * letters.length)];
+	  }
+	},
+	medium: {
+	  speed:  width/11/35,
+	  scoreMultiplier: 1.6 ,
+	  generateLetter: function() {
+		const letters = ['a', 's', 'd', 'f', 'j', 'k', 'l', ';'];
+		const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+		const symbols = ['@', '#', '$', '%', '&'];
+		const allChars = letters.concat(numbers, symbols);
+		return allChars[Math.floor(Math.random() * allChars.length)];
+	  }
+	},
+	hard: {
+		speed:  width/11/20,
+		scoreMultiplier: 1.2 ,
+    generateLetter: function() {
+      const letters = ['a', 's', 'd', 'f', 'j', 'k', 'l', ';'];
+      const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const symbols = ['@', '#', '$', '%', '&', '*', '+', '-', '/', '=', '?'];
+      const allChars = letters.concat(numbers, symbols);
+      return allChars[Math.floor(Math.random() * allChars.length)];
+    }
+  }
+};
+var speed;
+if (level === 0) {
+  var difficultyLevel = 'easy';
+  speed = difficulty.easy.speed;
+}
+else if (level === 1) {
+  var difficultyLevel = 'medium';
+  speed = difficulty.medium.speed;
+}
+else if (level === 2) {
+  var difficultyLevel = 'hard';
+  speed = difficulty.hard.speed;
+}
+
+
+var leaderboard = [];
+
 //User Input
 var curX;
 var curY;
@@ -13,7 +67,6 @@ var theDate = new Date();
 var startTime = theDate.getTime();
 var mouseDown = false;
 var clicked = false;
-var speed = width/11/35;
 var scoreMultiplier = 1.4;
 var state = 0;
 var curKeyLetter = String.fromCharCode(curKey).toLowerCase();
@@ -41,6 +94,8 @@ UsefulFunctions.prototype.resetGame = function(){
 	numOfBlocks = 0;
 	arrOfBlocks = [];
 	startTime = this.getTime();
+
+	leaderboard.push({ name: name, score: score });
 }
 //Converts a letter to the corrosponding column
 UsefulFunctions.prototype.convertToasdfjkl = function(letter){
@@ -126,7 +181,7 @@ UsefulFunctions.prototype.generateLetter = function(level){
 		}else if (randNum <= 98){
 			return("y");
 		}else if (randNum <= 99){
-			return("z");
+			return("x");
 		}else{
 			return("a");
 		}
@@ -156,6 +211,9 @@ document.addEventListener("mouseup", (e) => {
 document.addEventListener("click", (e) => {
 	clicked = true;
 });
+
+let name = prompt("Enter your name:");
+
 //Draws the lines and the keys
 var drawGameBackground = function(){
 	var letters = ["a", "s", "d", "f", "j", "k", "l", ";"]
@@ -215,6 +273,16 @@ FallingLetter.prototype.moveY = function(speed){
 	this.yPos += speed;
 }
 //var possiblePositions = [0, width/10, width*2/10, width*3/10, width*6/10, width*7/10, width*8/10, width*9/10]
+function drawLeaderboard() {
+	ctx.font = "24px Arial";
+	ctx.fillStyle = "#000000";
+	ctx.fillText("Leaderboard:", 20, 50);
+	for (var i = 0; i < leaderboard.length && i < 10; i++) {
+	  var player = leaderboard[i];
+	  var text = (i+1) + ". " + player.name + " - " + player.score;
+	  ctx.fillText(text, 20, 80 + i*30);
+	}
+}
 function draw() {
   ctx.fillStyle = "white";
   ctx.fillRect(0,0,width,height);
@@ -238,10 +306,8 @@ function draw() {
 		}
 		curWord = "";
 	  }
-	  if(posY%(width/7) <= speed){
-		arrOfBlocks.push(new FallingLetter(usefulFunctions.generateLetter(0), 50, -width/11, Math.floor(Math.random() * 4), width/11));
-		numOfBlocks++;
-		arrOfBlocks.push(new FallingLetter(usefulFunctions.generateLetter(0), 50, -width/11, Math.floor(Math.random() * 4)+4, width/11));
+	  if(posY%(width/3) <= speed){
+		arrOfBlocks.push(new FallingLetter(usefulFunctions.generateLetter(0), 50, -width/11, Math.floor(Math.random() * 8), width/11));
 		numOfBlocks++;
 	  }
 	  for(var i = 0; i < arrOfBlocks.length; i++){
@@ -277,16 +343,17 @@ function draw() {
 		state = 2;
 	  }
 	  drawGameBackground();
-  }else if(state == 2){
-	ctx.fillStyle = "black";
-	ctx.font = Math.floor(width/11*(score.toString().length+15)**(-0.55)).toString() + "px georgia";
-	ctx.textAlign = 'center';
-	ctx.fillText("Your score is: " + score + "      Click to go back to the homepage", width/2, height/9);
-	if(clicked){
-		state = 0;
-	}
+
+}else if(state == 2){
+  ctx.fillStyle = "black";
+  ctx.font = Math.floor(width/11*(score.toString().length+15)**(-0.55)).toString() + "px georgia";
+  ctx.textAlign = 'center';
+  ctx.fillText("Your score is: " + score + "      Click to go back to the homepage", width/2, height/9);
+  if(clicked){
+	  state = 0;
   }
-  clicked = false;
-  window.requestAnimationFrame(draw);
+}
+clicked = false;
+window.requestAnimationFrame(draw);
 };
 draw();
