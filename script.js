@@ -175,15 +175,15 @@ Button.prototype.checkClicked = function(isHovering, runFunc) {
   if (clicked && isHovering) {
     usefulFunctions.resetGame();
     if (this.buttonText == "Easy") {
-      speed = width / 11 / 70;
+      speed = width / 11 / 100;
       state = 1;
     }
     if (this.buttonText == "Medium") {
-      speed = width / 11 / 50;
+      speed = width / 11 / 75;
       state = 1;
     }
     if (this.buttonText == "Hard") {
-      speed = width / 11 / 30;
+      speed = width / 11 / 50;
       state = 1;
     }
     if (this.buttonText == "About") {
