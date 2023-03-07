@@ -397,13 +397,13 @@ function draw() {
 	for(var i = 0; i < log.length; i++){
 		if(counter < 4){
 			var type;
-			if(log[i][1] - 70 < 1){
+			if(log[i][1] - 100 < 1){
 				type = "easy";
 			}
-			if(log[i][1] - 50 < 1){
+			if(log[i][1] - 75 < 1){
 				type = "medium";
 			}
-			if(log[i][1] - 30 < 1){
+			if(log[i][1] - 50 < 1){
 				type = "hard";
 			}
 			ctx.fillText("Attempt: " + log[i][0] + "     Difficulty: " + type + "     Score: " + log[i][2], width / 2, height * (i+4) / 11);
