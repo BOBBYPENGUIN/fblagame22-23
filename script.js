@@ -346,6 +346,9 @@ function draw() {
       state = 2;
       setTimeout(1000)
     }
+	if(clicked){
+		timer = 0;
+	}
     drawGameBackground();
   } else if (state == 2) { //End State- No change
     ctx.fillStyle = "black";
