@@ -14,7 +14,7 @@ var startTime = theDate.getTime();
 var mouseDown = false;
 var clicked = false;
 var keyDown = false;
-var speed = width / 11 / 35;
+var speed = height / 7 / 35;
 var scoreMultiplier = 1.4;
 var state = 0;
 var curKeyLetter = String.fromCharCode(curKey).toLowerCase();
@@ -175,15 +175,15 @@ Button.prototype.checkClicked = function(isHovering, runFunc) {
   if (clicked && isHovering) {
     usefulFunctions.resetGame();
     if (this.buttonText == "Easy") {
-      speed = width / 11 / 100;
+      speed = height / 2 / 100;
       state = 1;
     }
     if (this.buttonText == "Medium") {
-      speed = width / 11 / 75;
+      speed = height / 2 / 75;
       state = 1;
     }
     if (this.buttonText == "Hard") {
-      speed = width / 11 / 50;
+      speed = height / 2 / 50;
       state = 1;
     }
     if (this.buttonText == "About") {
@@ -341,7 +341,7 @@ function draw() {
     arrOfPos[i]++;
     }*/
     if (timer - Math.floor((usefulFunctions.getTime() - startTime) / 1000) <= 0) {
-		log.push([attemptNum, 1/(speed/width*11), score]);
+		log.push([attemptNum, 1/(speed/height * 2), score]);
 		attemptNum++;
       state = 2;
       setTimeout(1000)
